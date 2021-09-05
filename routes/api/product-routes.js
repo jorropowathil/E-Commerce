@@ -22,16 +22,18 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
-  try {
-    // find one category by its `id` value
-    const productInfo = await Category.findByPk(req.params.id, {
-       // be sure to include its associated Products
-      include: [{model : Product, }]
-    })
-    res.status(200).json(categoryInfo);
-  } catch (error) {
-    res.status(500).json(err);
-  }
+  Product.findOne({
+      where: {
+          id: req.params.id
+      },
+      attributes: ['id', 'product_name', 'price', 'stock'],
+      include: [
+        {model: Category, attributes: ['category_name'],},
+        {model: Tag, attributes: ['tag_name']},
+      ]
+  }).then((singleProduct) => {
+      res.json(singleProduct)
+  })
 });
 
 // create new product
@@ -110,6 +112,14 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  try {
+    Product.destroy({
+      where: { id: req.params.id}
+    })
+  } 
+  catch (error) {
+    res.status(500).json(error);
+  }
 });
 
 module.exports = router;
