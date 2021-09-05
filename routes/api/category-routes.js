@@ -27,16 +27,51 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const categoryInfo = await Category.craete(req.body);
-  // create a new category
+  try {
+      // create a new category
+    const categoryInfo = await Category.craete(req.body);
+    res.status(200).json(categoryInfo);
+  } catch (error) {
+    res.status(500).json(categoryInfo);
+  }
 });
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  try {
+    const categoryInfo = await Category.update(req.body, {
+      where: {
+        id: req.params.id
+        },
+      }); 
+      if (!categoryInfo.id) {
+        res.status(404).json({ message: 'No category found with that id!' });
+        return;
+      }
+      res.status(200).json(categoryInfo);
+  } 
+  catch (error) {
+    res.status(500).json(error);
+  }
 });
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
-});
+  try {
+    const categoryInfo = await Category.destroy(req.body, {
+      where: {
+        id: req.params.id
+        },
+      }); 
+      if (!categoryInfo.id) {
+        res.status(404).json({ message: 'No category found with that id!' });
+        return;
+      }
+      res.status(200).json(categoryInfo);
+  } 
+  catch (error) {
+    res.status(500).json(error);
+  }
+})
 
 module.exports = router;
