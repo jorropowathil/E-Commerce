@@ -13,7 +13,7 @@ Category.init(
     autoIncrement: true,
   },
   category_name: {
-    type: DataTypes.string,
+    type: DataTypes.STRING,
     allowNull: false,
   }
   },
