@@ -23,7 +23,6 @@ Category.init(
     freezeTableName: true,
     underscored: true,
     modelName: 'Category',
-  }
-  );
+  });
 
 module.exports = Category;
